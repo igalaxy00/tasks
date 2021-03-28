@@ -1,6 +1,7 @@
 import random
 import Bets
 
+
 def roll():
     die1 = random.randint(1, 6)
     die2 = random.randint(1, 6)
@@ -28,6 +29,7 @@ def round():
         if roll_result == 7:
             return False
 
+
 def game():
     bet(1)
     win = 0
@@ -38,8 +40,9 @@ def game():
         if lets_play == True:
             win += 1
         if lets_play == False:
-            lose +=1
-    print(win/experiment)
-    print(lose/experiment)
+            lose += 1
+    print(win / experiment)
+    print(lose / experiment)
+
 
 game()
