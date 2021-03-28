@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DatalorePublishingService">
+    <option name="notebookMapping">
+      <map>
+        <entry key="42577">
+          <value>
+            <map>
+              <entry key="lWK1OpUqDLimHv43RyQv6W">
+                <value>
+                  <PublishedNotebookState>
+                    <option name="id" value="A7fmZCSMuvJCOEIfntavMe" />
+                    <option name="link" value="https://view.datalore.io/notebook/A7fmZCSMuvJCOEIfntavMe" />
+                    <option name="owner" value="lWK1OpUqDLimHv43RyQv6W" />
+                  </PublishedNotebookState>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="54285">
+          <value>
+            <map>
+              <entry key="lWK1OpUqDLimHv43RyQv6W">
+                <value>
+                  <PublishedNotebookState>
+                    <option name="id" value="uoGOWJmfA2qrivDVD2Y0fP" />
+                    <option name="link" value="https://view.datalore.io/notebook/uoGOWJmfA2qrivDVD2Y0fP" />
+                    <option name="owner" value="lWK1OpUqDLimHv43RyQv6W" />
+                  </PublishedNotebookState>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
