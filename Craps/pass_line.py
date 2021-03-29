@@ -39,15 +39,28 @@ def game():
     bet = 1
     win = 0
     lose = 0
-    experiment = 1000000
+    capital = 1
+    game_number = 0
+    game_length = 0
+    overall_length = 0
+    experiment = 10000000
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(experiment):
+        game_length += 1
+        if capital == 0:
+            game_number += 1
+            capital = 1
+            overall_length += game_length
+            game_length = 0
         lets_play = round()
-        if lets_play == True:
+        if lets_play:
             win += 1
             winnings += bet
-        if lets_play == False:
+            capital += bet
+        if not lets_play:
             winnings -= bet
+            capital -= bet
+
     print("Chance to win " + str(win / experiment))
 
     print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
@@ -77,6 +90,8 @@ def game():
     z = 1.65
     VI = z * Standart_Deviation
     print("Индекс волатильности игры " + str(VI))
+
+    print("Средняя продолжительность игры " + str(overall_length / game_number))
 
 
 if __name__ == '__main__':
