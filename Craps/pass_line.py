@@ -36,7 +36,7 @@ def round():
 
 
 def game():
-    bet = 2
+    bet = 1
     win = 0
     lose = 0
     experiment = 1000000
@@ -48,23 +48,36 @@ def game():
             winnings += bet
         if lets_play == False:
             winnings -= bet
+    print("Chance to win " + str(win / experiment))
 
-    print(winnings)  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
+    print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
 
     EV_per_Unit = winnings / (experiment * bet)
-    print(EV_per_Unit)  # Ожидаемый выигрыш/проигрыш на одну ставку
+    print("EV per Unit " + str(EV_per_Unit))  # Ожидаемый выигрыш/проигрыш на одну ставку
 
     House_Edge = EV_per_Unit * 100
-    print(House_Edge)  # Преимущество /доход заведения (house advantage/house edge, H.A.)
+    print("House Edge " + str(House_Edge))  # Преимущество /доход заведения (house advantage/house edge, H.A.)
 
     RTP = 1 + winnings / (experiment * bet)
-    print(RTP)  # Процент возврата (Return To Player, RTP)
+    print("Return to Player " + str(RTP))  # Процент возврата (Return To Player, RTP)
 
-    win_chance = win / experiment
-    VAR = 0
-    for i in range(experiment):
-        VAR += ((bet - winnings) ** 2) * win_chance
-    print(VAR)
+    EV_per_Unit_Squared = EV_per_Unit ** 2
+    EV_per_Squared_Unit = (win / experiment) + ((experiment - win) / experiment)
+    VAR = EV_per_Squared_Unit - EV_per_Unit_Squared  # Дисперсия - возможно
+    print("Возможно дисперсия " + str(VAR))
+
+    Standart_Deviation = VAR ** 0.5
+    print("Среднекватратичное отклонение " + str(Standart_Deviation))
+
+    EV_Units = EV_per_Unit * experiment
+    SD_Units = Standart_Deviation * (experiment ** 0.5)
+    print("Средний суммарный выигрыш " + str(EV_Units) + "\n"
+          + "Его СКО " + str(SD_Units))
+
+    z = 1.65
+    VI = z * Standart_Deviation
+    print("Индекс волатильности игры " + str(VI))
+
 
 if __name__ == '__main__':
     game()
