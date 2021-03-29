@@ -18,15 +18,21 @@ def bet(i):
 def round():
     point = roll()
     round = True
+    #ставка
     if point in (7, 11):
+        # проверка ставки
         return True
     if point in (2, 3, 12):
+        # проверка ставки
         return False
     while round:
+        #ставка
         roll_result = roll()
         if roll_result == point:
+            #проверка ставки
             return True
         if roll_result == 7:
+            #проверка ставки
             return False
 
 
