@@ -1,5 +1,5 @@
 import random
-
+import numpy as np
 
 def roll():
     die1 = random.randint(1, 6)
@@ -38,7 +38,9 @@ def round():
 def game():
     bet = 1
     win = 0
-    lose = 0
+    d = 0
+    test = []
+
     capital = 1
     game_number = 0
     game_length = 0
@@ -54,10 +56,12 @@ def game():
             game_length = 0
         lets_play = round()
         if lets_play:
+            test.append(1)
             win += 1
             winnings += bet
             capital += bet
         if not lets_play:
+            test.append(-1)
             winnings -= bet
             capital -= bet
 
@@ -79,6 +83,8 @@ def game():
     VAR = EV_per_Squared_Unit - EV_per_Unit_Squared  # Дисперсия - возможно
     print("Возможно дисперсия " + str(VAR))
 
+    print("Дисперсия 2 " + str(np.var(test)))
+
     Standart_Deviation = VAR ** 0.5
     print("Среднекватратичное отклонение " + str(Standart_Deviation))
 
@@ -87,7 +93,7 @@ def game():
     print("Средний суммарный выигрыш " + str(EV_Units) + "\n"
           + "Его СКО " + str(SD_Units))
 
-    z = 1.65 
+    z = 1.65
     VI = z * Standart_Deviation
     print("Индекс волатильности игры " + str(VI))
 
