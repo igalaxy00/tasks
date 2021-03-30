@@ -99,6 +99,5 @@ def game():
 
     print("Средняя продолжительность игры " + str(overall_length / game_number))
 
-
 if __name__ == '__main__':
     game()
