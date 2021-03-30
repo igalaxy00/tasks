@@ -1,5 +1,8 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
+import math
+
 
 def roll():
     die1 = random.randint(1, 6)
@@ -18,13 +21,14 @@ def round():
     point = roll()
     round = True
     # ставка
-    if point in (7, 11):
+    if point in (7, 11):  # выигрыш
         # проверка ставки
         return True
-    if point in (2, 3, 12):
+    if point in (2, 3, 12):  # проигрыш
         # проверка ставки
         return False
-    while round:
+    # 5 - point
+    while round:  # пока не выыпадет 5 или 7
         # ставка
         roll_result = roll()
         if roll_result == point:
@@ -35,17 +39,22 @@ def round():
             return False
 
 
+EV_UNIT = 0
+l = []
+l1 = []
+test = []
+
+
 def game():
     bet = 1
     win = 0
     d = 0
-    test = []
 
     capital = 1
     game_number = 0
     game_length = 0
     overall_length = 0
-    experiment = 10000000
+    experiment = 1000000
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(experiment):
         game_length += 1
@@ -64,6 +73,7 @@ def game():
             test.append(-1)
             winnings -= bet
             capital -= bet
+        l.append(winnings / (experiment * bet))
 
     print("Chance to win " + str(win / experiment))
 
@@ -89,6 +99,7 @@ def game():
     print("Среднекватратичное отклонение " + str(Standart_Deviation))
 
     EV_Units = EV_per_Unit * experiment
+
     SD_Units = Standart_Deviation * (experiment ** 0.5)
     print("Средний суммарный выигрыш " + str(EV_Units) + "\n"
           + "Его СКО " + str(SD_Units))
@@ -99,5 +110,22 @@ def game():
 
     print("Средняя продолжительность игры " + str(overall_length / game_number))
 
+
+def build_graphic():
+    # график средних выигрышей
+    plt.title("График средних выигрышей")
+    plt.plot(l, label='График средних выигрышей')
+    # медиана
+    plt.hlines(np.median(l), 0, 1000000, colors='r', label='Медиана')
+    # график стремится к мат ожиданию
+
+    a = np.std(l)
+    plt.hlines(a, 0, 1000000, colors='b', label='Ско')
+    plt.hlines(-a, 0, 1000000, colors='b', label='-Ско')
+
+    plt.legend()
+    plt.show()
+
 if __name__ == '__main__':
     game()
+    build_graphic()
