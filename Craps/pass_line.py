@@ -87,7 +87,7 @@ def game():
     print("Средний суммарный выигрыш " + str(EV_Units) + "\n"
           + "Его СКО " + str(SD_Units))
 
-    z = 1.65
+    z = 1.65 
     VI = z * Standart_Deviation
     print("Индекс волатильности игры " + str(VI))
 
