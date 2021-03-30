@@ -7,7 +7,7 @@ def roll():
     die2 = random.randint(1, 6)
     return die2 + die1
 
-
+# ИГОРЬ ГАЛАКТИОНОВ ЛОХ
 # ставка
 # рол
 # подсчет
