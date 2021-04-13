@@ -43,6 +43,11 @@ EV_UNIT = 0
 l = []
 l1 = []
 test = []
+list_intervals_down = []
+list_intervals_up = []
+mat_ojidanie = 0
+
+experiment = 100000
 
 
 def game():
@@ -54,9 +59,11 @@ def game():
     game_number = 0
     game_length = 0
     overall_length = 0
-    experiment = 1000000
+
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(experiment):
+
+        ####
         game_length += 1
         if capital == 0:
             game_number += 1
@@ -75,11 +82,16 @@ def game():
             capital -= bet
         l.append(winnings / (experiment * bet))
 
+    for i in range(0, len(test) - 1):
+        list_intervals_down.append(l[i + 1] - (1.65 / math.sqrt(i + 1)) * np.var(test))
+        list_intervals_up.append(l[i + 1] + (1.65 / math.sqrt(i + 1)) * np.var(test))
+
     print("Chance to win " + str(win / experiment))
 
     print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
 
     EV_per_Unit = winnings / (experiment * bet)
+    mat_ojidanie = winnings / (experiment * bet)
     print("EV per Unit " + str(EV_per_Unit))  # Ожидаемый выигрыш/проигрыш на одну ставку
 
     House_Edge = EV_per_Unit * 100
@@ -106,25 +118,41 @@ def game():
 
     z = 1.65
     VI = z * Standart_Deviation
+
+    confidence_interval_low = RTP - VI / math.sqrt(experiment)
+    confidence_interval_up = RTP + VI / math.sqrt(experiment)
+
+    print("дов интервал" + str(confidence_interval_low))
+    print("дов интервал врх" + str(confidence_interval_up))
+
     print("Индекс волатильности игры " + str(VI))
 
     print("Средняя продолжительность игры " + str(overall_length / game_number))
 
 
+
 def build_graphic():
+    # ГраФИК Доверительной вероятности
+    plt.title("График доверительной вероятности")
+    plt.hlines(mat_ojidanie, 0, 10000)
+    plt.plot(list_intervals_down)
+    plt.plot(list_intervals_up)
+    plt.show()
     # график средних выигрышей
     plt.title("График средних выигрышей")
+    l
     plt.plot(l, label='График средних выигрышей')
     # медиана
-    plt.hlines(np.median(l), 0, 1000000, colors='r', label='Медиана')
+    #plt.hlines(np.median(l), 0, experiment*100, colors='r', label='Медиана')
     # график стремится к мат ожиданию
 
     a = np.std(l)
-    plt.hlines(a, 0, 1000000, colors='b', label='Ско')
-    plt.hlines(-a, 0, 1000000, colors='b', label='-Ско')
+   #plt.hlines(a, 0, experiment*100, colors='b', label='Ско')
+    #plt.hlines(-a, 0, experiment*100, colors='b', label='-Ско')
 
     plt.legend()
     plt.show()
+
 
 if __name__ == '__main__':
     game()
