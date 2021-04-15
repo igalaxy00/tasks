@@ -136,29 +136,29 @@ def game():
 
 
 def build_graphic():
-    # -------график доверительной вероятности----
+    #-------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
     # plt.hlines(mat_ojidanie, 0, 10000)
     # plt.plot(list_intervals_down)
     # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    # plt.plot(l)
-    # медиана
-    # plt.hlines(np.median(l), 0, experiment*100, colors='r', label='Медиана')
-    # график стремится к мат ожиданию
-    # a = np.std(l)
-    # plt.hlines(a, 0, experiment*100, colors='b', label='Ско')
-    # plt.hlines(-a, 0, experiment*100, colors='b', label='-Ско')
+    plt.plot(l)
+    #медиана
+    plt.hlines(np.median(l), 0, experiment, colors='r', label='Медиана')
+    #график стремится к мат ожиданию
+    a = np.std(l)
+    plt.hlines(a, 0, experiment, colors='b', label='Ско')
+    plt.hlines(-a, 0, experiment, colors='b', label='-Ско')
 
     # -------график рапспределения выигрышей---------
     plt.title("График рапспределения выигрышей")
-    plt.vlines(-1, 0, 0.51)
-    plt.vlines(1, 0, 0.49)
+    # plt.vlines(-1, 0, 0.51)
+    # plt.vlines(1, 0, 0.49)
 
     # plt.hlines(0.5, win_chance, 1)
     # plt.hlines(0.6, 1 - win_chance, 1)
-
+    plt.legend()
     plt.show()
 
 

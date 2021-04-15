@@ -36,9 +36,6 @@ def round():
         # ставка
         roll_result = roll()
 
-        if roll_result == 12:
-            return
-
         if roll_result == point:
             # проверка ставки
             return True
@@ -54,7 +51,7 @@ list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
 
-experiment = 5000000
+experiment = 1000000
 
 win_bet = []
 lose_bet = []
@@ -70,7 +67,7 @@ def game():
 
     win = 0
     winnings = 0
-
+    zero = 0
     # loses = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(experiment):
 
@@ -87,6 +84,7 @@ def game():
         if lets_play is None:
             round_history.append(0)
             average_winings.append(winnings / (experiment * bet))
+            zero += 1
             continue
 
         if lets_play:
@@ -111,6 +109,7 @@ def game():
 
     # Вывод результатов
     print("Chance to win " + str(win / experiment))
+    print("Шанс на ноль " + str(zero / experiment))
     print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
 
     EV_per_Unit = winnings / (experiment * bet)
@@ -151,6 +150,7 @@ def game():
 
 
 def build_graphic():
+    map = [0.479319, 0.027686, 1 - (0.479319 + 0.027686)]
     # -------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
     # plt.hlines(mat_ojidanie, 0, 10000)
@@ -158,16 +158,18 @@ def build_graphic():
     # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    plt.plot(average_winings)
-    # медиана
-    # plt.hlines(np.median(average_winings), 0, experiment*100, colors='r', label='Медиана')
-    # график стремится к мат ожиданию
-    a = np.std(average_winings)
-    # plt.hlines(a, 0, experiment*100, colors='b', label='Ско')
-    # plt.hlines(-a, 0, experiment*100, colors='b', label='-Ско')
+    # plt.title("График средних выйграшей")
+    # plt.plot(average_winings)
+    # # медиана
+    # plt.hlines(np.median(average_winings), 0, experiment, colors='r', label='Медиана')
+    # # график стремится к мат ожиданию
+    # a = np.std(average_winings)
+    # plt.hlines(a, 0, experiment, colors='b', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='b', label='-Ско')
 
     # -------график рапспределения выигрышей---------
-
+    plt.title("Закон Распределение")
+    plt.plot(map)
     plt.show()
 
 
