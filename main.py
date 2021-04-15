@@ -1,14 +1,9 @@
-from math import factorial
-import random
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib
+from scipy.stats import bernoulli
+import seaborn as sb
 
-if __name__ == '__main__':
-    dictionary = [0, 1, 1, 2, 3, 4, 5, 6]
-    s = pd.Series(dictionary)
-    s.plot.kde()
-
-    f = 0.5
-    print(1)
-    print("hello its me")
+data_bern = bernoulli.rvs(size=1000,p=0.6)
+ax = sb.distplot(data_bern,
+                  kde=True,
+                  color='crimson',
+                  hist_kws={"linewidth": 25,'alpha':1})
+ax.set(xlabel='Bernouli', ylabel='Frequency')

@@ -24,13 +24,21 @@ def round():
     if point in (7, 11):  # выигрыш
         # проверка ставки
         return True
-    if point in (2, 3, 12):  # проигрыш
+    if point in (2, 3):  # проигрыш
         # проверка ставки
         return False
+
+    if point == 12:
+        return
+
     # 5 - point
     while round:  # пока не выыпадет 5 или 7
         # ставка
         roll_result = roll()
+
+        if roll_result == 12:
+            return
+
         if roll_result == point:
             # проверка ставки
             return True
@@ -40,62 +48,69 @@ def round():
 
 
 EV_UNIT = 0
-l = []
-test = []
+average_winings = []
+round_history = []
 list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
 
-experiment = 1000000
+experiment = 5000000
 
 win_bet = []
 lose_bet = []
 
-win_chance = 0
-
 
 def game():
     bet = 1
-    win = 0
 
     capital = 1
     game_number = 0
     game_length = 0
     overall_length = 0
 
-    winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
+    win = 0
+    winnings = 0
+
+    # loses = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(experiment):
 
-        ####
         game_length += 1
+
         if capital == 0:
             game_number += 1
             capital = 1
             overall_length += game_length
             game_length = 0
+
         lets_play = round()
+
+        if lets_play is None:
+            round_history.append(0)
+            average_winings.append(winnings / (experiment * bet))
+            continue
+
         if lets_play:
+            lose_bet.append(-1)
+            round_history.append(-1)
+            winnings -= bet
+            capital -= bet
+        if not lets_play:
             win_bet.append(1)
-            test.append(1)
+            round_history.append(1)
             win += 1
             winnings += bet
             capital += bet
-        if not lets_play:
-            lose_bet.append(-1)
-            test.append(-1)
-            winnings -= bet
-            capital -= bet
-        l.append(winnings / (experiment * bet))
+
+        average_winings.append(winnings / (experiment * bet))
 
     # Построение дов. вероятности
-    disp = np.var(test)
-    for i in range(0, len(test) - 1):
-        list_intervals_down.append(l[i + 1] - (1.65 / math.sqrt(i + 1)) * disp)
-        list_intervals_up.append(l[i + 1] + (1.65 / math.sqrt(i + 1)) * disp)
+    disp = np.var(round_history)
+    for i in range(0, len(round_history) - 1):
+        list_intervals_down.append(average_winings[i + 1] - (1.65 / math.sqrt(i + 1)) * disp)
+        list_intervals_up.append(average_winings[i + 1] + (1.65 / math.sqrt(i + 1)) * disp)
 
     # Вывод результатов
-    win_chance = win / experiment
-    print("Chance to win " + str(win_chance))
+    print("Chance to win " + str(win / experiment))
     print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
 
     EV_per_Unit = winnings / (experiment * bet)
@@ -109,10 +124,10 @@ def game():
 
     EV_per_Unit_Squared = EV_per_Unit ** 2
     EV_per_Squared_Unit = (win / experiment) + ((experiment - win) / experiment)
-    VAR = EV_per_Squared_Unit - EV_per_Unit_Squared  # Дисперсия - возможно
+    VAR = np.var(round_history)  # Дисперсия - возможно
     print("Возможно дисперсия " + str(VAR))
 
-    print("Дисперсия 2 " + str(np.var(test)))
+    print("Дисперсия 2 " + str(np.var(round_history)))
 
     Standart_Deviation = VAR ** 0.5
     print("Среднекватратичное отклонение " + str(Standart_Deviation))
@@ -143,21 +158,15 @@ def build_graphic():
     # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    # plt.plot(l)
+    plt.plot(average_winings)
     # медиана
-    # plt.hlines(np.median(l), 0, experiment*100, colors='r', label='Медиана')
+    # plt.hlines(np.median(average_winings), 0, experiment*100, colors='r', label='Медиана')
     # график стремится к мат ожиданию
-    # a = np.std(l)
+    a = np.std(average_winings)
     # plt.hlines(a, 0, experiment*100, colors='b', label='Ско')
     # plt.hlines(-a, 0, experiment*100, colors='b', label='-Ско')
 
     # -------график рапспределения выигрышей---------
-    plt.title("График рапспределения выигрышей")
-    plt.vlines(-1, 0, 0.51)
-    plt.vlines(1, 0, 0.49)
-
-    # plt.hlines(0.5, win_chance, 1)
-    # plt.hlines(0.6, 1 - win_chance, 1)
 
     plt.show()
 
