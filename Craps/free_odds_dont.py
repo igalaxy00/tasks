@@ -67,7 +67,7 @@ def game():
     overall_length = 0
 
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
-    for i in range(experiment):
+    for i in range(1, experiment + 1):
 
         ####
         game_length += 1
@@ -121,7 +121,7 @@ def game():
         if lets_play is None:
             round_history.append(0)
             game_outcomes[6] += 1
-        average_winings.append(winnings / (experiment * bet))
+        average_winings.append(winnings / (i * bet))
 
     # Построение дов. вероятности
     disp = np.var(round_history)
@@ -171,10 +171,10 @@ def game():
 
 def build_graphic():
     # -------график доверительной вероятности----
-    plt.title("График доверительной вероятности")
-    plt.hlines(mat_ojidanie, 0, 10000)
-    plt.plot(list_intervals_down)
-    plt.plot(list_intervals_up)
+    # plt.title("График доверительной вероятности")
+    # plt.hlines(-0.01, 0, 10000)
+    # plt.plot(list_intervals_down)
+    # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
     # plt.plot(average_winings)
@@ -183,17 +183,19 @@ def build_graphic():
     # plt.hlines(np.median(average_winings), 0, experiment, colors='r', label='Медиана')
     # # график стремится к мат ожиданию
     # a = np.std(average_winings)
-    # plt.hlines(a, 0, experiment, colors='b', label='Ско')
-    # plt.hlines(-a, 0, experiment, colors='b', label='-Ско')
+    # plt.hlines(a, 0, experiment, colors='purple', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='purple', label='-Ско')
+    # plt.ylim(-0.2, 0.2)
+    # plt.xlim(0, 10000)
     #
     # # -------график распределения выигрышей---------
-    # plt.title("График распределения выигрышей")
-    # probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
-    # x_values = ["lose_pass", "lose_point", "win_dont_pass", "win4_10", "win5_9", "win6_8", "12"]
-    # print(probabilities)
-    # plt.xticks(rotation=-15)
-    # plt.plot(x_values, probabilities)
-    # plt.legend()
+    plt.title("График распределения выигрышей")
+    probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
+    x_values = ["lose_pass", "lose_point", "win_dont_pass", "win4_10", "win5_9", "win6_8", "bet_return"]
+    print(probabilities)
+    plt.xticks(rotation=-15)
+    plt.plot(x_values, probabilities)
+    plt.legend()
     plt.show()
 
 

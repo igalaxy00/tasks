@@ -10,33 +10,58 @@ def roll():
     return die2 + die1
 
 
+come_point = 0
+bet = False
+plus = 0
+
+
 # ставка
 # рол
 # подсчет
-def bet(i):
-    print("bet")
+# def bet(i):
+#     print("bet")
 
 
+# 0  = ничего не происходит
+# 1  = победа для нас
+# -1 = проигрыш для нас
 def round():
+    global come_point, bet, plus
     point = roll()
     round = True
-    # ставка
-    if point in (7, 11):  # выигрыш
-        # проверка ставки
-        return True
-    if point in (2, 3, 12):  # проигрыш
-        # проверка ставки
-        return False
-    # 5 - point
-    while round:  # пока не выыпадет 5 или 7
-        # ставка
-        roll_result = roll()
-        if roll_result == point:
-            # проверка ставки
-            return True
-        if roll_result == 7:
-            # проверка ставки
-            return False
+    if (point == come_point) and (bet):
+        bet = False
+        return 1
+    if (point == 7) and (bet):
+        bet = False
+        return -1
+    if point in (7, 11):
+        return 0
+    if point in (2, 3, 12):
+        return 0
+    if not bet:
+        bet = True
+        comeout_roll = roll()
+        come_point = comeout_roll
+        if comeout_roll in (7, 11):
+            bet = False
+            return 1
+        if comeout_roll in (2, 3, 12):
+            bet = False
+            return -1
+        if comeout_roll == point:
+            return 0
+
+    while True:
+        comeout_roll = roll()
+        if comeout_roll == come_point:
+            bet = False
+            return 1
+        if comeout_roll == point:
+            return 0
+        if comeout_roll == 7:
+            bet = False
+            return -1
 
 
 EV_UNIT = 0
@@ -45,15 +70,15 @@ round_history = []
 list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
-EV_per_Unit = 0
 
 experiment = 1000000
 
 win_chance = 0
+nothing = 0
 
 
 def game():
-    global EV_per_Unit
+    global nothing
     bet = 1
     win = 0
 
@@ -61,28 +86,36 @@ def game():
     game_number = 0
     game_length = 0
     overall_length = 0
-
+    i = 1
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
-    for i in range(1, experiment + 1):
+    while i < experiment:
 
         ####
-        game_length += 1
+
         if capital == 0:
             game_number += 1
             capital = 1
             overall_length += game_length
             game_length = 0
         lets_play = round()
-        if lets_play:
+        if lets_play == 0:
+            # round_history.append(0)
+            nothing += 1
+            continue
+        game_length += 1
+        if lets_play == 1:
             round_history.append(1)
             win += 1
             winnings += bet
             capital += bet
-        if not lets_play:
+            i += 1
+            average_winnings.append(winnings / (i * bet))
+        if lets_play == -1:
             round_history.append(-1)
             winnings -= bet
             capital -= bet
-        average_winnings.append(winnings / (i * bet))
+            i += 1
+            average_winnings.append(winnings / (i * bet))
 
     # Построение дов. вероятности
     disp = np.var(round_history)
@@ -135,19 +168,19 @@ def game():
 def build_graphic():
     # -------график доверительной вероятности----
     plt.title("График доверительной вероятности")
-    plt.hlines(EV_per_Unit, 0, 100)
+    plt.hlines(-0.01, 0, 10000)
     plt.plot(list_intervals_down)
     plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    # plt.title("График средних выигрышей")
     # plt.plot(average_winnings)
+    # plt.title("График средних выигрышей")
     # # медиана
     # plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
     # # график стремится к мат ожиданию
     # a = np.std(average_winnings)
-    # plt.hlines(a, 0, experiment, colors='b', label='Ско')
-    # plt.hlines(-a, 0, experiment, colors='b', label='-Ско')
+    # plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
     # plt.ylim(-0.2, 0.2)
     # plt.xlim(0, 10000)
 
@@ -158,7 +191,7 @@ def build_graphic():
 
     # plt.hlines(0.5, win_chance, 1)
     # plt.hlines(0.6, 1 - win_chance, 1)
-    plt.legend()
+    # plt.legend()
     plt.show()
 
 

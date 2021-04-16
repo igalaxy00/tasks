@@ -23,13 +23,13 @@ def round():
     # ставка
     if point in (7, 11):  # выигрыш
         # проверка ставки
-        return True
+        return -1
     if point in (2, 3):  # проигрыш
         # проверка ставки
-        return False
+        return 1
 
     if point == 12:
-        return
+        return 0
 
     # 5 - point
     while round:  # пока не выыпадет 5 или 7
@@ -38,14 +38,14 @@ def round():
 
         if roll_result == point:
             # проверка ставки
-            return True
+            return -1
         if roll_result == 7:
             # проверка ставки
-            return False
+            return 1
 
 
 EV_UNIT = 0
-average_winings = []
+average_winnings = []
 round_history = []
 list_intervals_down = []
 list_intervals_up = []
@@ -69,7 +69,7 @@ def game():
     winnings = 0
     zero = 0
     # loses = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
-    for i in range(experiment):
+    for i in range(1, experiment + 1):
 
         game_length += 1
 
@@ -81,31 +81,30 @@ def game():
 
         lets_play = round()
 
-        if lets_play is None:
+        if lets_play == 0:
             round_history.append(0)
-            average_winings.append(winnings / (experiment * bet))
+            # average_winnings.append(winnings / (experiment * bet))
             zero += 1
-            continue
 
-        if lets_play:
+        if lets_play == -1:
             lose_bet.append(-1)
             round_history.append(-1)
             winnings -= bet
             capital -= bet
-        if not lets_play:
+        if lets_play == 1:
             win_bet.append(1)
             round_history.append(1)
             win += 1
             winnings += bet
             capital += bet
 
-        average_winings.append(winnings / (experiment * bet))
+        average_winnings.append(winnings / (i * bet))
 
     # Построение дов. вероятности
     disp = np.var(round_history)
     for i in range(0, len(round_history) - 1):
-        list_intervals_down.append(average_winings[i + 1] - (1.65 / math.sqrt(i + 1)) * disp)
-        list_intervals_up.append(average_winings[i + 1] + (1.65 / math.sqrt(i + 1)) * disp)
+        list_intervals_down.append(average_winnings[i + 1] - (1.65 / math.sqrt(i + 1)) * disp)
+        list_intervals_up.append(average_winnings[i + 1] + (1.65 / math.sqrt(i + 1)) * disp)
 
     # Вывод результатов
     print("Chance to win " + str(win / experiment))
@@ -153,23 +152,26 @@ def build_graphic():
     map = [0.479319, 0.027686, 1 - (0.479319 + 0.027686)]
     # -------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
-    # plt.hlines(mat_ojidanie, 0, 10000)
+    # plt.hlines(-0.01, 0, 10000)
     # plt.plot(list_intervals_down)
     # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    # plt.title("График средних выйграшей")
-    # plt.plot(average_winings)
-    # # медиана
-    # plt.hlines(np.median(average_winings), 0, experiment, colors='r', label='Медиана')
-    # # график стремится к мат ожиданию
-    # a = np.std(average_winings)
-    # plt.hlines(a, 0, experiment, colors='b', label='Ско')
-    # plt.hlines(-a, 0, experiment, colors='b', label='-Ско')
+    plt.title("График средних выигрышей")
+    plt.plot(average_winnings)
+    # медиана
+    plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # график стремится к мат ожиданию
+    a = np.std(average_winnings)
+    plt.hlines(a, 0, experiment, colors='g', label='Ско')
+    plt.hlines(-a, 0, experiment, colors='g', label='-Ско')
+    plt.ylim(-0.2, 0.2)
+    plt.xlim(0, 10000)
 
     # -------график рапспределения выигрышей---------
-    plt.title("Закон Распределение")
-    plt.plot(map)
+    # plt.title("Закон Распределение")
+    # plt.plot(map)
+    plt.legend()
     plt.show()
 
 
