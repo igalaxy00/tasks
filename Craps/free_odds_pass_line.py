@@ -173,23 +173,23 @@ def build_graphic():
     # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    plt.plot(average_winings)
-    # медиана
-    plt.title("График средних выигрышей")
-    plt.hlines(np.median(average_winings), 0, experiment, colors='r', label='Медиана')
-    # график стремится к мат ожиданию
-    a = np.std(average_winings)
-    plt.hlines(a, 0, experiment, colors='pink', label='Ско')
-    plt.hlines(-a, 0, experiment, colors='pink', label='-Ско')
-    plt.ylim(-0.2, 0.2)
-    plt.xlim(0, 100000)
+    # plt.plot(average_winings)
+    # # медиана
+    # plt.title("График средних выигрышей")
+    # plt.hlines(np.median(average_winings), 0, experiment, colors='r', label='Медиана')
+    # # график стремится к мат ожиданию
+    # a = np.std(average_winings)
+    # plt.hlines(a, 0, experiment, colors='pink', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='pink', label='-Ско')
+    # plt.ylim(-0.2, 0.2)
+    # plt.xlim(0, 100000)
     #
     # # -------график распределения выигрышей---------
-    # plt.title("График распределения выигрышей")
-    # probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
-    # x_values = ["x2", "x3", "x2.5", "x2.2", "lose_all", "lose_pass"]
-    # print(probabilities)
-    # plt.plot(x_values, probabilities)
+    plt.title("График распределения выигрышей")
+    probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
+    x_values = ["x2", "x3", "x2.5", "x2.2", "lose_all", "lose_pass"]
+    print(probabilities)
+    plt.plot(x_values, probabilities)
     plt.legend()
     plt.show()
 
