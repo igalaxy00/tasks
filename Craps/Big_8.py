@@ -130,16 +130,16 @@ def build_graphic():
     # plt.plot(list_intervals_up)
     #
     # # -------график средних выигрышей--------
-    plt.title("График доверительной вероятности")
-    plt.hlines(EV_per_Unit, 0, 100)
-    plt.plot(list_intervals_down)
-    plt.plot(list_intervals_up)
-    a = np.std(average_winnings)
-    plt.hlines(a, 0, experiment, colors='black', label='Ско')
-    plt.hlines(-a, 0, experiment, colors='black', label='-Ско')
+    plt.plot(average_winnings)
+    plt.title("График средних выигрышей")
+    # медиана
     plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # график стремится к мат ожиданию
+    a = np.std(average_winnings)
+    plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
     plt.ylim(-0.2, 0.2)
-    plt.xlim(0, 100000)
+    plt.xlim(0, 10000)
     plt.legend()
     plt.show()
 

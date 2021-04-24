@@ -169,22 +169,22 @@ def game():
 
 def build_graphic():
     # -------график доверительной вероятности----
-    plt.title("График доверительной вероятности")
-    plt.hlines(-0.01, 0, 10000)
-    plt.plot(list_intervals_down)
-    plt.plot(list_intervals_up)
+    # plt.title("График доверительной вероятности")
+    # plt.hlines(-0.01, 0, 10000)
+    # plt.plot(list_intervals_down)
+    # plt.plot(list_intervals_up)
 
     # -------график средних выигрышей--------
-    # plt.plot(average_winnings)
-    # plt.title("График средних выигрышей")
-    # # медиана
-    # plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
-    # # график стремится к мат ожиданию
-    # a = np.std(average_winnings)
-    # plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
-    # plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
-    # plt.ylim(-0.2, 0.2)
-    # plt.xlim(0, 10000)
+    plt.plot(average_winnings)
+    plt.title("График средних выигрышей")
+    # медиана
+    plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # график стремится к мат ожиданию
+    a = np.std(average_winnings)
+    plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
+    plt.ylim(-0.2, 0.2)
+    plt.xlim(0, 10000)
 
     # -------график распределения выигрышей---------
     # plt.title("График распределения выигрышей")

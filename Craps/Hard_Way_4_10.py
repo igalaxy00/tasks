@@ -4,10 +4,15 @@ import matplotlib.pyplot as plt
 import math
 
 
+
 def roll():
+    double = False
     die1 = random.randint(1, 6)
     die2 = random.randint(1, 6)
-    return die2 + die1
+    if die2 == die1:
+        double = True
+    return [die2+die1, double]
+
 
 
 # ставка
@@ -24,11 +29,11 @@ def round():
     bet = 1
     # ставка
     while (True):
-        big_point = roll()
-        if big_point == 6:  # выигрыш 1:1
-            return bet
-        if big_point == 7:
-            return -bet
+        point = roll()
+        if point[1] and point[0] == 4:  # выйгрыш
+            return 1
+        if point[0] == 7 or point[0] == 4 and not point[1]:
+            return -1
 
 
 EV_UNIT = 0
@@ -64,11 +69,13 @@ def game():
             game_length = 0
         lets_play = round()
         if lets_play == 1:
-            round_history.append(1)
+            game_outcomes[0] += 1
+            round_history.append(9)
             win += 1
-            winnings += bet
-            capital += bet
+            winnings += bet * 7
+            capital += bet * 7
         if lets_play == -1:
+            game_outcomes[1] += 1
             round_history.append(-1)
             winnings -= bet
             capital -= bet
@@ -124,31 +131,33 @@ def game():
 
 def build_graphic():
     # -------график доверительной вероятности----
-    # plt.title("График доверительной вероятности")
-    # plt.hlines(EV_per_Unit, 0, 100)
-    # plt.plot(list_intervals_down)
-    # plt.plot(list_intervals_up)
+    plt.title("График доверительной вероятности")
+    plt.hlines(EV_per_Unit, 0, 100)
+    plt.plot(list_intervals_down)
+    plt.plot(list_intervals_up)
+
+    plt.xlim(0, 10000)
+    plt.show()
     #
     # # -------график средних выигрышей--------
-    plt.plot(average_winnings)
-    plt.title("График средних выигрышей")
-    # медиана
-    plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
-    # график стремится к мат ожиданию
-    a = np.std(average_winnings)
-    plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
-    plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
-    plt.ylim(-0.2, 0.2)
-    plt.xlim(0, 10000)
-    plt.legend()
-    plt.show()
-
-    # -------график распределения выигрышей---------
-    # plt.title("График распределения выигрышей")
-    # plt.vlines(1, 0, 0.45)
-    # plt.vlines(-1, 0, 0.55)
+    # plt.plot(average_winnings)
+    # plt.title("График средних выигрышей")
+    # # медиана
+    # plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # # график стремится к мат ожиданию
+    # a = np.std(average_winnings)
+    # plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
+    # plt.ylim(-0.2, 0.2)
+    # plt.xlim(0, 10000)
     # plt.legend()
     # plt.show()
+    # -------график распределения выигрышей---------
+    plt.title("График распределения выигрышей")
+    plt.vlines(1, 0, 0.11)
+    plt.vlines(-1, 0, 0.89)
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':

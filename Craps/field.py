@@ -149,14 +149,25 @@ def build_graphic():
     # plt.legend()
     # plt.show()
 
-    # -------график распределения выигрышей---------
-    plt.title("График распределения выигрышей")
-    probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
-    x_values = ["win", "loose", "win_x2"]
-    print(probabilities)
-    plt.plot(x_values, probabilities)
-    plt.legend()
+    plt.plot(average_winnings)
+    plt.title("График средних выигрышей")
+    # медиана
+    plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # график стремится к мат ожиданию
+    a = np.std(average_winnings)
+    plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
+    plt.ylim(-0.2, 0.2)
+    plt.xlim(0, 10000)
     plt.show()
+    # -------график распределения выигрышей---------
+    # plt.title("График распределения выигрышей")
+    # probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
+    # x_values = ["win", "loose", "win_x2"]
+    # print(probabilities)
+    # plt.plot(x_values, probabilities)
+    # plt.legend()
+    # plt.show()
 
 
 if __name__ == '__main__':
