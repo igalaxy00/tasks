@@ -23,12 +23,17 @@ average_winings = []
 def round():
     bet = 1
     # ставка
-    while (True):
-        big_point = roll()
-        if big_point == 8:  # выигрыш 7:1
-            return bet
-        if big_point == 7:
-            return -bet
+    single_roll = roll()
+    if single_roll == 2:
+        return 2
+    if single_roll == 12:
+        return 12
+    if single_roll == 3:
+        return 3
+    if single_roll == 11:
+        return 11
+    else:
+        return -1
 
 
 EV_UNIT = 0
@@ -38,7 +43,7 @@ list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
 EV_per_Unit = 0
-game_outcomes = [0, 0, 0]
+game_outcomes = [0, 0, 0, 0, 0]
 experiment = 1000000
 
 win_chance = 0
@@ -63,15 +68,71 @@ def game():
             overall_length += game_length
             game_length = 0
         lets_play = round()
-        if lets_play == 1:
-            round_history.append(1)
-            win += 1
-            winnings += bet
-            capital += bet
+        destiny = random.randint(1, 4)
+        # 1 - 2
+        # 2 - 2 судьба
+        # 3 -
+        if lets_play == 2:
+            if destiny == 1:
+                game_outcomes[1] += 1
+                round_history.append(bet * 6.75 * 2)
+                win += 1
+                winnings += bet * 6.75 * 2
+                capital += bet * 6.75 * 2
+            else:
+                game_outcomes[0] += 1
+                round_history.append(bet * 6.75)
+                win += 1
+                winnings += bet * 6.75
+                capital += bet * 6.75
+
+        if lets_play == 12:
+            if destiny == 2:
+                game_outcomes[1] += 1
+                round_history.append(bet * 6.75 * 2)
+                win += 1
+                winnings += bet * 6.75 * 2
+                capital += bet * 6.75 * 2
+            else:
+                game_outcomes[0] += 1
+                round_history.append(bet * 6.75)
+                win += 1
+                winnings += bet * 6.75
+                capital += bet * 6.75
+
+        if lets_play == 3:
+            if destiny == 3:
+                game_outcomes[3] += 1
+                round_history.append(bet * 3 * 2)
+                win += 1
+                winnings += bet * 3 * 2
+                capital += bet * 3 * 2
+            else:
+                game_outcomes[2] += 1
+                round_history.append(bet * 3)
+                win += 1
+                winnings += bet * 3
+                capital += bet * 3
+
+        if lets_play == 11:
+            if destiny == 4:
+                game_outcomes[3] += 1
+                round_history.append(bet * 3 * 2)
+                win += 1
+                winnings += bet * 3 * 2
+                capital += bet * 3 * 2
+            else:
+                game_outcomes[2] += 1
+                round_history.append(bet * 3)
+                win += 1
+                winnings += bet * 3
+                capital += bet * 3
+
         if lets_play == -1:
-            round_history.append(-1)
-            winnings -= bet
-            capital -= bet
+            game_outcomes[4] += 1
+            round_history.append(-1.25)
+            winnings -= 1.25
+            capital -= 1.25
         average_winnings.append(winnings / (i * bet))
 
     # Построение дов. вероятности
@@ -125,9 +186,11 @@ def game():
 def build_graphic():
     # -------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
-    # plt.hlines(EV_per_Unit, 0, 100)
+    # plt.hlines(EV_per_Unit, 0, 10000000)
     # plt.plot(list_intervals_down)
     # plt.plot(list_intervals_up)
+    # plt.ylim(-0.2, 0.2)
+    # plt.xlim(0, 10000000)
     #
     # # -------график средних выигрышей--------
     plt.plot(average_winnings)
@@ -138,17 +201,19 @@ def build_graphic():
     a = np.std(average_winnings)
     plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
     plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
-    plt.ylim(-0.2, 0.2)
-    plt.xlim(0, 10000)
+    plt.ylim(-0.4, 0.1)
+    plt.xlim(0, 100000)
     plt.legend()
     plt.show()
 
     # -------график распределения выигрышей---------
-    # plt.title("График распределения выигрышей")
-    # plt.vlines(1, 0, 0.45)
-    # plt.vlines(-1, 0, 0.55)
-    # plt.legend()
-    # plt.show()
+    plt.title("График распределения выигрышей")
+    probabilities = (list(map(lambda x: x / experiment, game_outcomes)))
+    x_values = ["2,12", "2,12double", "3,11", "3,11double", "lose"]
+    print(probabilities)
+    plt.plot(x_values, probabilities)
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':

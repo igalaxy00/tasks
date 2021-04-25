@@ -3,7 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ВОЗМОЖНО НЕ РАБОТАЕТ ПРАВИЛЬНО ПОДУМАТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def roll():
     die1 = random.randint(1, 6)
     die2 = random.randint(1, 6)
@@ -28,6 +37,7 @@ plus = 0
 # 2 = перенос ставки
 def round():
     global come_point, bet, plus
+    global bet
     point = roll()
     if (point == come_point) and (bet):  # если выпал кампоинт и ставка то луз
         bet = False
@@ -81,7 +91,7 @@ nothing = 0
 
 def game():
     global nothing
-    bet = 1
+    wager = 1
     win = 0
 
     capital = 1
@@ -102,25 +112,29 @@ def game():
             # round_history.append(0)
             nothing += 1
             continue
+
         game_length += 1
+
         if lets_play == 0:# деньги возвращаются
             round_history.append(0)
             i += 1
-            average_winnings.append(winnings / (i * bet))
+            average_winnings.append(winnings / (i * wager))
+
         if lets_play == 1:
             game_outcomes[0] += 1
             round_history.append(1)
             win += 1
-            winnings += bet
-            capital += bet
+            winnings += 1
+            capital += 1
             i += 1
-            average_winnings.append(winnings / (i * bet))
+            average_winnings.append(winnings / (i * wager))
+
         if lets_play == -1:
             round_history.append(-1)
-            winnings -= bet
-            capital -= bet
+            winnings -= 1
+            capital -= 1
             i += 1
-            average_winnings.append(winnings / (i * bet))
+            average_winnings.append(winnings / (i * wager))
 
     # Построение дов. вероятности
     disp = np.var(round_history)
@@ -133,13 +147,13 @@ def game():
     print("Chance to win " + str(win_chance))
     print("Expected Value " + str(winnings))  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
 
-    EV_per_Unit = winnings / (experiment * bet)
+    EV_per_Unit = winnings / (experiment * wager)
 
     print("EV per Unit " + str(EV_per_Unit))  # Ожидаемый выигрыш/проигрыш на одну ставку
     House_Edge = EV_per_Unit * 100
     print("House Edge " + str(House_Edge))  # Преимущество /доход заведения (house advantage/house edge, H.A.)
 
-    RTP = 1 + winnings / (experiment * bet)
+    RTP = 1 + winnings / (experiment * wager)
     print("Return to Player " + str(RTP))  # Процент возврата (Return To Player, RTP)
 
     EV_per_Unit_Squared = EV_per_Unit ** 2
@@ -202,5 +216,6 @@ def build_graphic():
 
 
 if __name__ == '__main__':
+
     game()
     build_graphic()
