@@ -63,10 +63,6 @@ def round():
                 return -1
 
 
-
-
-
-
 EV_UNIT = 0
 average_winnings = []
 round_history = []
@@ -100,12 +96,12 @@ def game():
             game_length = 0
         lets_play = round()
 
-        if lets_play == 1:# ставка на 4
+        if lets_play == 1:  # ставка на 4
             game_outcomes[0] += 1
-            round_history.append(bet * 5 / 9)
+            round_history.append(bet * 5 / 11)
             win += 1
-            winnings += bet * 5 / 9
-            capital += bet * 5 / 9
+            winnings += bet * 5 / 11
+            capital += bet * 5 / 11
 
         if lets_play == -1:
             game_outcomes[3] += 1
@@ -113,19 +109,19 @@ def game():
             winnings -= bet
             capital -= bet
 
-        if lets_play == 2:# ставка на 5
+        if lets_play == 2:  # ставка на 5
             game_outcomes[1] += 1
-            round_history.append(bet * 5 / 7)
+            round_history.append(bet * 5 / 8)
             win += 1
-            winnings += bet * 5 / 7
-            capital += bet * 5 / 7
+            winnings += bet * 5 / 8
+            capital += bet * 5 / 8
 
-        if lets_play == 3:# ставка на 6
+        if lets_play == 3:  # ставка на 6
             game_outcomes[2] += 1
-            round_history.append(bet*6/7)
+            round_history.append(bet * 4 / 5)
             win += 1
-            winnings += bet*6/7
-            capital += bet*6/7
+            winnings += bet * 4 / 5
+            capital += bet * 4 / 5
         average_winnings.append(winnings / (i * bet))
 
     # Построение дов. вероятности
@@ -186,14 +182,7 @@ def build_graphic():
     # plt.plot(list_intervals_up)
     #
     # # -------график средних выигрышей--------
-    # a = np.std(average_winnings)
-    # plt.hlines(a, 0, experiment, colors='black', label='Ско')
-    # plt.hlines(-a, 0, experiment, colors='black', label='-Ско')
-    # plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
-    # plt.ylim(-0.2, 0.2)
-    # plt.xlim(0, 100000)
-    # plt.legend()
-    # plt.show()
+
 
     # plt.plot(average_winnings)
     # plt.title("График средних выигрышей")
