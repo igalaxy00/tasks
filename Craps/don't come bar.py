@@ -22,9 +22,10 @@ plus = 0
 #     print("bet")
 
 
-# 0  = ничего не происходит
+# 0  = деньги возвращаются
 # 1  = победа для нас
 # -1 = проигрыш для нас
+# 2 = перенос ставки
 def round():
     global come_point, bet, plus
     point = roll()
@@ -34,32 +35,32 @@ def round():
     if (point == 7) and (bet):  # выигрываем если 7 и ставка
         bet = False
         return 1
-    if point in (2, 3, 12, 11):
-        return 0
-
+    if point in (2, 3, 12, 11, 7):
+        return 2
+#ставка
     if not bet:
         bet = True
         comeout_roll = roll()
         come_point = comeout_roll
-        if comeout_roll in (7, 11):# автолуз
+        if comeout_roll in (7, 11):  # автолуз
             bet = False
             return -1
-        if comeout_roll in (2, 3): # автовин
+        if comeout_roll in (2, 3):  # автовин
             bet = False
             return 1
-        if comeout_roll == 12:
+        if comeout_roll == 12:  # ушли в ноль
             bet = False
             return 0
         if comeout_roll == point:
-            return 0
+            return 2
 
     while True:
         comeout_roll = roll()
-        if comeout_roll == come_point:
+        if comeout_roll == come_point: # победили иль нет по ставке
             bet = False
             return -1
-        if comeout_roll == point:
-            return 0
+        if comeout_roll == point: # победили иль нет по игре
+            return 2
         if comeout_roll == 7:
             bet = False
             return 1
@@ -71,7 +72,7 @@ round_history = []
 list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
-
+game_outcomes = [0, 0, 0]
 experiment = 1000000
 
 win_chance = 0
@@ -97,12 +98,17 @@ def game():
             overall_length += game_length
             game_length = 0
         lets_play = round()
-        if lets_play == 0:
+        if lets_play == 2:#перенос ставки
             # round_history.append(0)
             nothing += 1
             continue
         game_length += 1
+        if lets_play == 0:# деньги возвращаются
+            round_history.append(0)
+            i += 1
+            average_winnings.append(winnings / (i * bet))
         if lets_play == 1:
+            game_outcomes[0] += 1
             round_history.append(1)
             win += 1
             winnings += bet
@@ -166,22 +172,23 @@ def game():
 
 def build_graphic():
     # -------график доверительной вероятности----
-    # plt.title("График доверительной вероятности")
-    # plt.hlines(-0.01, 0, 10000)
-    # plt.plot(list_intervals_down)
-    # plt.plot(list_intervals_up)
-
-    # -------график средних выигрышей--------
-    plt.plot(average_winnings)
-    plt.title("График средних выигрышей")
-    # медиана
-    plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
-    # график стремится к мат ожиданию
-    a = np.std(average_winnings)
-    plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
-    plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
+    plt.title("График доверительной вероятности")
+    plt.hlines(-0.01, 0, 100000)
+    plt.plot(list_intervals_down)
+    plt.plot(list_intervals_up)
     plt.ylim(-0.2, 0.2)
-    plt.xlim(0, 10000)
+    plt.xlim(0, 100000)
+    # -------график средних выигрышей--------
+    # plt.plot(average_winnings)
+    # plt.title("График средних выигрышей")
+    # # медиана
+    # plt.hlines(np.median(average_winnings), 0, experiment, colors='r', label='Медиана')
+    # # график стремится к мат ожиданию
+    # a = np.std(average_winnings)
+    # plt.hlines(a, 0, experiment, colors='yellow', label='Ско')
+    # plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
+    # plt.ylim(-0.2, 0.2)
+    # plt.xlim(0, 10000)
 
     # -------график распределения выигрышей---------
     # plt.title("График распределения выигрышей")

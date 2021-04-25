@@ -83,7 +83,7 @@ def game():
 
         if lets_play == 0:
             round_history.append(0)
-            # average_winnings.append(winnings / (experiment * bet))
+            average_winnings.append(winnings / (i * bet))
             zero += 1
 
         if lets_play == -1:
