@@ -193,7 +193,7 @@ def build_graphic():
 
     # plt.hlines(0.5, win_chance, 1)
     # plt.hlines(0.6, 1 - win_chance, 1)
-    # plt.legend()
+    plt.legend()
     plt.show()
 
 
