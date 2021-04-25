@@ -123,8 +123,8 @@ def game():
     confidence_interval_low = RTP - VI / math.sqrt(experiment)
     confidence_interval_up = RTP + VI / math.sqrt(experiment)
 
-    print("дов интервал" + str(confidence_interval_low))
-    print("дов интервал врх" + str(confidence_interval_up))
+    print("дов интервал " + str(confidence_interval_low))
+    print("дов интервал врх " + str(confidence_interval_up))
     print("Индекс волатильности игры " + str(VI))
     print("Средняя продолжительность игры " + str(overall_length / game_number))
 
