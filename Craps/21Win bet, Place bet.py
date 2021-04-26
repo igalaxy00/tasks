@@ -33,6 +33,7 @@ def round():
         if destiny == 1:
             if single_roll == 4:
                 return 1
+
         if destiny == 2:
             if single_roll == 5:
                 return 2

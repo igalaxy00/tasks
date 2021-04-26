@@ -163,8 +163,6 @@ def game():
     print("дов интервал врх" + str(confidence_interval_up))
     print("Индекс волатильности игры " + str(VI))
     print("Средняя продолжительность игры " + str(overall_length / game_number))
-
-
 def build_graphic():
     # -------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
