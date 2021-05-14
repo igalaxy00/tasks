@@ -72,6 +72,9 @@ round_history = []
 list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
+distribution = [0]
+for x in range(1, 500):
+    distribution.append(0)
 
 experiment = 1000000
 
@@ -81,6 +84,7 @@ nothing = 0
 
 def game():
     global nothing
+    global distribution
     bet = 1
     win = 0
 
@@ -98,6 +102,8 @@ def game():
             game_number += 1
             capital = 1
             overall_length += game_length
+            if game_length < 500:
+                distribution[game_length] += 1
             game_length = 0
         lets_play = round()
         if lets_play == 0:
@@ -168,6 +174,7 @@ def game():
 
 
 def build_graphic():
+    global distribution
     # -------график доверительной вероятности----
     # plt.title("График доверительной вероятности")
     # plt.hlines(-0.01, 0, 10000)
@@ -185,6 +192,10 @@ def build_graphic():
     plt.hlines(-a, 0, experiment, colors='yellow', label='-Ско')
     plt.ylim(-0.2, 0.2)
     plt.xlim(0, 10000)
+
+    plt.close()
+    plt.plot(distribution)
+    plt.title("Распределение средней продолжительности игры")
 
     # -------график распределения выигрышей---------
     # plt.title("График распределения выигрышей")

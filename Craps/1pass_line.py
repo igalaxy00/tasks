@@ -46,6 +46,9 @@ list_intervals_down = []
 list_intervals_up = []
 mat_ojidanie = 0
 EV_per_Unit = 0
+distribution = [0]
+for x in range(1, 500):
+    distribution.append(0)
 
 experiment = 1000000
 
@@ -54,6 +57,7 @@ win_chance = 0
 
 def game():
     global EV_per_Unit
+    global distribution
     bet = 1
     win = 0
 
@@ -61,6 +65,7 @@ def game():
     game_number = 0
     game_length = 0
     overall_length = 0
+
 
     winnings = 0  # Ожидаемый выигрыш/проигрыш если - то казино в плюсе на эти деньги
     for i in range(1, experiment + 1):
@@ -71,7 +76,9 @@ def game():
             game_number += 1
             capital = 1
             overall_length += game_length
-            game_length = 0
+            if game_length < 500:
+                distribution[game_length] += 1
+            game_length = 1
         lets_play = round()
         if lets_play:
             round_history.append(1)
@@ -134,10 +141,15 @@ def game():
 
 def build_graphic():
     # -------график доверительной вероятности----
+    global distribution
+    global distribution_aux
     plt.title("График доверительной вероятности")
     plt.hlines(EV_per_Unit, 0, 100)
     plt.plot(list_intervals_down)
     plt.plot(list_intervals_up)
+    plt.close()
+    plt.plot(distribution)
+    plt.title("Распределение средней продолжительности игры")
 
     # -------график средних выигрышей--------
     # plt.title("График средних выигрышей")

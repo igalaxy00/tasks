@@ -188,7 +188,6 @@ def build_graphic():
     # -------график доверительной вероятности----
     plt.title("График доверительной вероятности")
     plt.hlines(-0.01, 0, 100000)
-    plt.plot(list_intervals_down)
     plt.plot(list_intervals_up)
     plt.ylim(-0.2, 0.2)
     plt.xlim(0, 100000)
